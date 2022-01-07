@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{86EEB3D0-7290-DEA6-5B4B-F2FA478C65F7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Scenes\DemoScene2.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\FlappyBird.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\LightDemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Physics2D.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\ShapesScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\TerrainGenerator.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\MeshTest.h" />
+    <ClInclude Include="Scenes\ConvexPolygon.h" />
+    <ClInclude Include="Scenes\CubeDemo.h" />
+    <ClInclude Include="Scenes\BlackHole.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SandboxApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\MeshTest.shader" />
+    <None Include="Shaders\Line2D.shader" />
+    <None Include="Shaders\cube_demo.shader" />
+    <None Include="Shaders\instance.shader" />
+  </ItemGroup>
+</Project>
