@@ -52,6 +52,10 @@ struct Vec2 {
     float length(){
         return sqrtf(x * x + y * y);
     }
+
+    float lengthSquare() {
+        return x * x + y * y;
+    }
 };
 
 

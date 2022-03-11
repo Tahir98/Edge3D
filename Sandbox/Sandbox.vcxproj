@@ -76,14 +76,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Win64|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,16 +91,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Win64|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,16 +110,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist Win64|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,10 +130,13 @@
     <ClInclude Include="Scenes\BlackHole.h" />
     <ClInclude Include="Scenes\ConvexPolygon.h" />
     <ClInclude Include="Scenes\CubeDemo.h" />
+    <ClInclude Include="Scenes\DemoScene.h" />
     <ClInclude Include="Scenes\DemoScene2.h" />
     <ClInclude Include="Scenes\FlappyBird.h" />
     <ClInclude Include="Scenes\LightDemo.h" />
+    <ClInclude Include="Scenes\Menu.h" />
     <ClInclude Include="Scenes\MeshTest.h" />
+    <ClInclude Include="Scenes\MeshTest2.h" />
     <ClInclude Include="Scenes\Physics2D.h" />
     <ClInclude Include="Scenes\ShapesScene.h" />
     <ClInclude Include="Scenes\TerrainGenerator.h" />
@@ -151,10 +150,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\cube_demo.shader" />
-    <None Include="Shaders\instance.shader" />
-    <None Include="Shaders\Line2D.shader" />
-    <None Include="Shaders\MeshTest.shader" />
+    <None Include="Shaders\cursor.shader" />
+    <None Include="Shaders\plane.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

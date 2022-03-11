@@ -79,8 +79,8 @@ namespace Edge3D {
         va.bind();
         vb->bind();
 
-        va.addVertexAttribute(3, GL_FLOAT, false);
-        va.addVertexAttribute(3, GL_FLOAT, false);
+        va.addVertexAttribute(vb, 3, GL_FLOAT, false);
+        va.addVertexAttribute(vb, 3, GL_FLOAT, false);
 
         setSegment(segment);
     }
@@ -132,7 +132,7 @@ namespace Edge3D {
         }
     }
 
-    void Capsule::draw(Camera& camera, Light light) {
+    void Capsule::draw(Camera& camera, PointLight light) {
         shader->bind();
 
         model = Math::multiply(Math::multiply(Math::translate(pos), true, Math::scale(scale), false), true, Math::rotate(rotation), false);

@@ -8,12 +8,6 @@
 
 static float frametime;
 
-inline float my_abs(float x) {
-	if (x >= 0)
-		return x;
-	return -x;
-}
-
 class MeshTest : public Edge3D::Scene {
 private:
 	struct Ball {
@@ -46,6 +40,7 @@ private:
 	Edge3D::VertexBuffer* vb = nullptr;
 	Edge3D::IndexBuffer* ib = nullptr;
 	Edge3D::Shader* shader = nullptr;
+	Edge3D::FrameBuffer* fb = nullptr;
 
 	uint32_t uniform_buffer;
 
@@ -67,7 +62,6 @@ private:
 	float conservationV;
 	float conservationH;
 	float conservationB;
-	float fps;
 
 	std::default_random_engine engine;
 	std::uniform_real_distribution<float> distribution;
@@ -75,24 +69,19 @@ private:
 	bool stop = false;
 	std::thread* t1 = nullptr;
 
-	bool showPanel = true;
-	bool wireframe = false;
-
-	int l0, l1, l2, l3, l4;
-	//float radius = 0.5f;
-
-	std::vector<Vec3> planeVertices;
 	Material planeMaterial;
-	Edge3D::VertexBuffer* pvb;
+	Vec3 planeColor = { 1,1,1 };
+	Edge3D::VertexBuffer* pvb = nullptr;
 	Edge3D::VertexArray pva;
+	Edge3D::Shader* pShader = nullptr;
 
+	bool isTPressed = false;
+	float speed = 100;
+	bool vsync = true;
 public:
-	MeshTest(Edge3D::Window& window, std::string name) : window(window), Scene(name), skybox("assets/rooitou_park.jpg"), camera(70, 9.0f / 16.0f, 0.1f, 500) {
+	MeshTest(Edge3D::Window& window, std::string name) : window(window), Scene(name), skybox("assets/whale_skeleton.jpg"), camera(70, 9.0f / 16.0f, 0.1f, 500) {
 
 		mesh.calculate();
-
-		std::cout << "Mesh index size : " << mesh.getIndicesSize() << std::endl;
-
 		vb = new Edge3D::VertexBuffer(nullptr, 100000, GL_STATIC_DRAW);
 		ib = new Edge3D::IndexBuffer(nullptr, 100000, GL_STATIC_DRAW);
 
@@ -105,6 +94,8 @@ public:
 		va.addVertexAttribute(vb, 3, GL_FLOAT, false);
 
 		shader = new Edge3D::Shader("Shaders/MeshTest.shader");
+
+		fb = new Edge3D::FrameBuffer(600,600);
 
 		glGenBuffers(1, &uniform_buffer);
 		glBindBuffer(GL_UNIFORM_BUFFER, uniform_buffer);
@@ -133,13 +124,7 @@ public:
 
 		t1 = new std::thread(updateBalls, &balls, &width, &height, &conservationV, &conservationH, &conservationB, &gravity, &stop);
 
-		l0 = shader->getUniformLocation("model");
-		l1 = shader->getUniformLocation("material.ambient");
-		l2 = shader->getUniformLocation("material.diffuse");
-		l3 = shader->getUniformLocation("material.specular");
-		l4 = shader->getUniformLocation("material.shininess");
-
-		planeVertices = {
+		Vec3 planeVertices[] = {
 			{0.5f,0,0.5f},{0,1,0},
 			{0.5f,0,-0.5f},{0,1,0},
 			{-0.5f,0,-0.5f},{0,1,0},
@@ -154,11 +139,11 @@ public:
 		planeMaterial.specular = { 0.1f,0.1f,0.1f };
 		planeMaterial.shininess = 20;
 
-		pvb = new Edge3D::VertexBuffer((float*)planeVertices.data(), 12 * sizeof(Vec3), GL_STATIC_DRAW);
+		pvb = new Edge3D::VertexBuffer((float*)planeVertices, 12 * sizeof(Vec3), GL_STATIC_DRAW);
 		pva.addVertexAttribute(pvb, 3, GL_FLOAT, false);
 		pva.addVertexAttribute(pvb, 3, GL_FLOAT, false);
 
-		glLineWidth(2.0f);
+		pShader = new Edge3D::Shader("Shaders/plane.shader");
 
 		instanceVB = new Edge3D::VertexBuffer(nullptr, 10000 * sizeof(GLBall), GL_DYNAMIC_DRAW);
 	}
@@ -167,6 +152,12 @@ public:
 		delete vb;
 		delete ib;
 		delete shader;
+		delete fb;
+
+		delete pvb;
+		delete pShader;
+
+		delete instanceVB;
 	}
 
 	void onCreate() {
@@ -174,6 +165,14 @@ public:
 	}
 
 	void onUpdate(float delta) {
+		input(delta);
+		camera.update(delta);
+
+		planeMaterial.ambient = planeColor * 0.3f;
+		planeMaterial.diffuse = planeColor * 0.5f;
+
+		glfwSwapInterval(vsync ? 1 : 0);
+
 		if (vSegment != mesh.getVerticalSegment() || hSegment != mesh.getHorizontalSegment()) {
 			mesh.setSegment(vSegment, hSegment);
 			mesh.calculate();
@@ -181,9 +180,11 @@ public:
 			ib->subData(0, mesh.getIndicesSize(), mesh.getIndices());
 		}
 
-		input(delta);
-		camera.update(delta);
-
+		fb->bind();
+		fb->clear();
+		fb->clearColor(1, 1, 1, 1);
+		glViewport(0, 0, fb->getWidth(), fb->getHeight());
+		
 		glBindBuffer(GL_UNIFORM_BUFFER, uniform_buffer);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Matrix4x4), camera.getViewMatrix());
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(Matrix4x4), sizeof(Matrix4x4), camera.getProjectionMatrix());
@@ -194,14 +195,11 @@ public:
 		ib->bind();
 		shader->bind();
 
-
 		shader->setUniform3f("light.direction", light.direction.x, light.direction.y, light.direction.z);
 		shader->setUniform3f("light.ambient", light.ambient.x, light.ambient.y, light.ambient.z);
 		shader->setUniform3f("light.diffuse", light.diffuse.x, light.diffuse.y, light.diffuse.z);
 		shader->setUniform3f("light.specular", light.specular.x, light.specular.y, light.specular.z);
 		shader->setUniform1f("light.intensity", light.intensity);
-		shader->setUniform1i("wireframe", (int)wireframe);
-		//shader->setUniform3f("viewPos", 0, 0, 0);
 		shader->setUniform3f("viewPos", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 
 		for (unsigned int i = 0; i < balls.size(); i++) {
@@ -239,17 +237,42 @@ public:
 
 		glDrawElementsInstanced(GL_TRIANGLES, mesh.getIndicesSize() / sizeof(unsigned int), GL_UNSIGNED_INT, 0, glBalls.size());
 
-
-		Matrix4x4 model = Math::scale(2 * width, 1.0f, 2 * width);
 		pva.bind();
-		glUniformMatrix4fv(l0, 1, true, model.m[0]);
-		glUniform3f(l1, planeMaterial.ambient.x, planeMaterial.ambient.y, planeMaterial.ambient.z);
-		glUniform3f(l2, planeMaterial.diffuse.x, planeMaterial.diffuse.y, planeMaterial.diffuse.z);
-		glUniform3f(l3, planeMaterial.specular.x, planeMaterial.specular.y, planeMaterial.specular.z);
-		glUniform1f(l4, planeMaterial.shininess);
+		pShader->bind();
 
-		shader->setUniform1i("wireframe", (int)0);
+		pShader->setUniformMatrix4fv("view",1,true,camera.getViewMatrix());
+		pShader->setUniformMatrix4fv("projection", 1, true, camera.getProjectionMatrix());
+
+		pShader->setUniform3f("scale", width * 2.0f, 0, width * 2.0f);
+		pShader->setUniform3f("material.ambient", planeMaterial.ambient.x, planeMaterial.ambient.y, planeMaterial.ambient.z);
+		pShader->setUniform3f("material.diffuse", planeMaterial.diffuse.x, planeMaterial.diffuse.y, planeMaterial.diffuse.z);
+		pShader->setUniform3f("material.specular", planeMaterial.specular.x, planeMaterial.specular.y, planeMaterial.specular.z);
+		pShader->setUniform1f("material.shininess", planeMaterial.shininess);
+
+		pShader->setUniform3f("light.direction", light.direction.x, light.direction.y, light.direction.z);
+		pShader->setUniform3f("light.ambient", light.ambient.x, light.ambient.y, light.ambient.z);
+		pShader->setUniform3f("light.diffuse", light.diffuse.x, light.diffuse.y, light.diffuse.z);
+		pShader->setUniform3f("light.specular", light.specular.x, light.specular.y, light.specular.z);
+		pShader->setUniform1f("light.intensity", light.intensity);
+
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		fb->unbind();
+
+		ImGui::Begin("Demo");
+
+		ImVec2 PanelSize = ImGui::GetContentRegionAvail();
+		Vec2 fb_size = { (float)fb->getWidth(),(float)fb->getHeight() };	
+		
+		if (PanelSize.x != fb_size.x || PanelSize.y != fb_size.y) {
+			fb->resize(PanelSize.x, PanelSize.y);
+			ImVec2 size = ImGui::GetWindowSize();
+			camera.setAspectRatio((float)PanelSize.y / (float)PanelSize.x);
+		}
+
+		ImGui::Image((ImTextureID)fb->getTextureID(), PanelSize, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::End();
 
 	}
 
@@ -416,40 +439,58 @@ public:
 
 	void input(float delta) {
 		ImGui::Begin("Properties");
-		ImGui::Text("FPS = %.2f  Frame Time = %.3f", 1.0f / delta, delta);
-		ImGui::Text("Number of balls : %d, Update thread time = %.3f", balls.size(), frametime);
+		
+		ImGui::Checkbox("Vsync", &vsync);
+		ImGui::Text("Main thread");
+		ImGui::Text("FPS: %.2f  frame time: %.2fms", 1.0f / delta, delta * 1000.0f);
 
-		ImGui::SliderFloat3("Light direction", (float*)&light.direction, -1, 1);
-		ImGui::SliderFloat3("Light Ambient", (float*)&light.ambient, 0, 1);
-		ImGui::SliderFloat3("Light Diffuse", (float*)&light.diffuse, 0, 1);
-		ImGui::SliderFloat3("Light Specular", (float*)&light.specular, 0, 1);
-		ImGui::SliderFloat("Light Intensity", &light.intensity, 0, 3);
-		ImGui::Text("\n");
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Physics thread");
+		ImGui::Text("number of balls: %d", balls.size());
+		ImGui::Text("update time: %.2fms", frametime * 1000.0f);
 
-		ImGui::Text("\n");
-		ImGui::SliderInt("Horizontal Segment", &vSegment, 3, 50);
-		ImGui::SliderInt("Vertical Segment", &hSegment, 2, 50);
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Light Properties");
+		ImGui::SliderFloat3("direction", (float*)&light.direction, -1, 1);
+		ImGui::SliderFloat3("ambient", (float*)&light.ambient, 0, 1);
+		ImGui::SliderFloat3("diffuse", (float*)&light.diffuse, 0, 1);
+		ImGui::SliderFloat3("specular", (float*)&light.specular, 0, 1);
+		ImGui::SliderFloat("intensity", &light.intensity, 0, 3);
 
-		ImGui::Text("\n");
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Ball Segmentation");
+		ImGui::SliderInt("Horizontal", &vSegment, 3, 50);
+		ImGui::SliderInt("Vertical", &hSegment, 2, 50);
+
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Area Size");
 		ImGui::SliderFloat("Width", &width, 2, 50);
 		ImGui::SliderFloat("Height", &height, 10, 300);
 
-		ImGui::Text("\nGround Enegy Conservation");
-		ImGui::SliderFloat("V", &conservationV, 0, 2);
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Energy Conservation");
+		ImGui::SliderFloat("Ground", &conservationV, 0, 2);
+		ImGui::SliderFloat("Wall", &conservationH, 0, 2);
+		ImGui::SliderFloat("Balls", &conservationB, 0, 2);
 
-		ImGui::Text("\nWalls Enegy Conservation");
-		ImGui::SliderFloat("H", &conservationH, 0, 2);
-
-		ImGui::Text("\nCollision Enegy Conservation");
-		ImGui::SliderFloat("B", &conservationB, 0, 2);
-
-		ImGui::Text("\nCount");
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Number of ball will be added");
 		ImGui::SliderInt("Count", &count, 2, 500);
 
-		ImGui::Text("\nGravity");
+		ImGui::Separator();
+		ImGui::NewLine();
 		ImGui::SliderFloat("Gravity", &gravity, -100, -0);
+		ImGui::SliderFloat("Fire Speed", &speed, 2, 400);
 
-		ImGui::Checkbox("wireframe", &wireframe);
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::ColorEdit3("Plane Color", (float*)&planeColor);
 
 		ImGui::End();
 
@@ -553,6 +594,41 @@ public:
 			t1 = new std::thread(updateBalls, &balls, &width, &height, &conservationV, &conservationH, &conservationB, &gravity, &stop);
 		}
 
+		if (handler.getKeyState(GLFW_KEY_T) && !isTPressed) {
+			isTPressed = true;
+
+			stop = true;
+			t1->join();
+			delete t1;
+			stop = false;
+			Ball ball;
+			ball.pos = camera.getPosition() + camera.getDirection() * 2;
+
+			material.diffuse = {
+				distribution(engine),
+				distribution(engine),
+				distribution(engine)
+			};
+
+			material.ambient = material.diffuse;
+			material.ambient.x /= 1.3f;
+			material.ambient.y /= 1.3f;
+			material.ambient.z /= 1.3f;
+
+			material.shininess = 20 + distribution(engine) * 180.0f;
+
+			ball.material = material;
+			ball.radius = radius;
+			ball.velocity = camera.getDirection() * speed;
+
+			balls.push_back(ball);
+			glBalls.push_back({});
+			t1 = new std::thread(updateBalls, &balls, &width, &height, &conservationV, &conservationH, &conservationB, &gravity, &stop);
+		}
+		else if (!handler.getKeyState(GLFW_KEY_T)){
+			isTPressed = false;
+		}
+
 		if (handler.getKeyState(GLFW_KEY_E)) {
 			//stop = true;
 			//t1->join();
@@ -590,32 +666,3 @@ public:
 		}
 	}
 };
-
-
-
-/*
-if (balls.size() != 0) {
-			Ball& ball = balls[0];
-
-			//glUniform3f(l1, ball.material.ambient.x, ball.material.ambient.y, ball.material.ambient.z);
-			//glUniform3f(l2, ball.material.diffuse.x, ball.material.diffuse.y, ball.material.diffuse.z);
-			glUniform3f(l3, ball.material.specular.x, ball.material.specular.y, ball.material.specular.z);
-			glUniform1f(l4, ball.material.shininess);
-		}
-
-		for (Ball& ball : balls) {
-			Matrix4x4 model = Math::multiply(Math::translate(ball.pos), true, Math::scale(ball.radius, ball.radius, ball.radius), true);
-			//shader->setUniformMatrix4fv("model", 1, true, model.m[0]);
-			glUniform3f(l1, ball.material.ambient.x, ball.material.ambient.y, ball.material.ambient.z);
-			glUniform3f(l2,  ball.material.diffuse.x, ball.material.diffuse.y, ball.material.diffuse.z);
-			//shader->setUniform3f("material.specular", ball.material.specular.x, ball.material.specular.y, ball.material.specular.z);
-			//shader->setUniform1f("material.shininess", ball.material.shininess);
-			glUniformMatrix4fv(l0, 1, true, model.m[0]);
-
-			if (wireframe)
-				glDrawElements(GL_LINES, mesh.getIndicesSize() / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-			else
-				glDrawElements(GL_TRIANGLES, mesh.getIndicesSize() / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-
-		}
-*/

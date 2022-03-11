@@ -152,6 +152,10 @@ namespace Edge3D {
 
 			glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 		}
+
+		uint32_t& getTextureID() {
+			return textureID;
+		}
 	};
 
 

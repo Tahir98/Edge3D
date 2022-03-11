@@ -34,7 +34,8 @@ namespace Edge3D {
 	}
 
 	void SceneManager::update(float delta) {
-		scenes[scenes.size() - 1]->onUpdate(delta);
+		if(scenes.size() > 0)
+			scenes[scenes.size() - 1]->onUpdate(delta);
 	}
 
 	void SceneManager::top(Scene* scene) {

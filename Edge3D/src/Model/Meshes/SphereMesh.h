@@ -46,6 +46,19 @@ namespace Edge3D {
 					}
 				}
 
+
+				for (unsigned int i = 0; i < verticalSegment; i++) {
+					for (unsigned int j = 0; j < horizontalSegment; j++) {
+						line_indices.push_back(i * (horizontalSegment + 1) + j);
+						line_indices.push_back((i + 1) * (horizontalSegment + 1) + j + 1);
+						line_indices.push_back(i * (horizontalSegment + 1) + j);
+						line_indices.push_back((i + 1) * (horizontalSegment + 1) + j);
+					
+						line_indices.push_back(i * (horizontalSegment + 1) + j);
+						line_indices.push_back(i * (horizontalSegment + 1) + j + 1);
+					}
+				}
+
 			}
 			else {
 				for (unsigned int i = 0; i < verticalSegment; i++) {
@@ -87,10 +100,35 @@ namespace Edge3D {
 						}
 					}
 				}
+
+				for (unsigned int i = 0; i < verticalSegment; i++) {
+					for (unsigned int j = 0; j < horizontalSegment; j++) {
+						if (i < verticalSegment - 1) {
+							line_indices.push_back(i * (horizontalSegment + 1) + j);
+							line_indices.push_back((i + 1) * (horizontalSegment + 1) + j + 1);
+							line_indices.push_back((i + 1) * (horizontalSegment + 1) + j);
+							
+							line_indices.push_back(i * (horizontalSegment + 1) + j);
+							line_indices.push_back(i * (horizontalSegment + 1) + j + 1);
+							line_indices.push_back((i + 1) * (horizontalSegment + 1) + j + 1);
+						}
+						else {
+							line_indices.push_back(i * (horizontalSegment + 1) + j);
+							line_indices.push_back((0) * (horizontalSegment + 1) + j + 1);
+							line_indices.push_back((0) * (horizontalSegment + 1) + j);
+							
+							line_indices.push_back(i * (horizontalSegment + 1) + j);
+							line_indices.push_back(i * (horizontalSegment + 1) + j + 1);
+							line_indices.push_back((0) * (horizontalSegment + 1) + j + 1);
+
+						}
+					}
+				}
 			}
 
 			vSize = sizeof(Vec3) * vertices.size();
 			iSize = sizeof(unsigned int) * indices.size();
+			liSize = sizeof(unsigned int) * line_indices.size();
 		}
 
 		void setSegment(const unsigned int verticalSegment, const unsigned int horizontalSegment) {

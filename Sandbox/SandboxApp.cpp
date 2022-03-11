@@ -7,10 +7,12 @@
 //#include "Scenes/DemoScene.h"
 //#include "Scenes/DemoScene2.h"
 //#include "Scenes/LightDemo.h"
-#include "Scenes/MeshTest.h"
+//#include "Scenes/MeshTest.h"
+#include "Scenes/MeshTest2.h"
 //#include "Scenes/ConvexPolygon.h"
 //#include "Scenes/CubeDemo.h"
-#include "Scenes/BlackHole.h"
+//#include "Scenes/BlackHole.h"
+#include "Scenes/Menu.h"
 
 class SandboxApp : public Edge3D::Application {
 public:
@@ -23,7 +25,7 @@ public:
 	}
 
 	void run() override {
-		Edge3D::Window window("Cube Demo",1920,1080,false,true);
+		Edge3D::Window window("Cube Demo",1920,1080,false,true,true);
 
 		//Edge3D::SceneManager::push(new FlappyBird());
 		//Edge3D::SceneManager::push(new Physics(window.getWindow()));
@@ -31,15 +33,18 @@ public:
 		//Edge3D::SceneManager::push(new ShapesScene(window.getWindow()));
 		//Edge3D::SceneManager::push(new LightDemo(window,"Light Demo"));
 		//Edge3D::SceneManager::push(new DemoScene(window));
-		Edge3D::SceneManager::push(new MeshTest(window, "Mesh Test"));
+		Edge3D::SceneManager::push(new MeshTest2(window, "Mesh Test2"));
 		//Edge3D::SceneManager::push(new ConvexPolygon(window,"Convex Polygon"));
 		//Edge3D::SceneManager::push(new CubeDemo(window,"Cube Demo"));
 		//Edge3D::SceneManager::push(new BlackHole(window ,"Black Hole"));
 		while(window.isRunning()){
 			window.update();
-		
+			Menu::begin(window);
+
 			Edge3D::SceneManager::update(window.getDelta());
 
+
+			Menu::end();
 			window.postEvents();
 		}
 		

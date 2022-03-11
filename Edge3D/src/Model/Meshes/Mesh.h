@@ -8,17 +8,21 @@ namespace Edge3D {
 	protected:
 		std::vector<Vec3> vertices;
 		std::vector<unsigned int> indices;
-		int vSize, iSize;
+		std::vector<unsigned int> line_indices;
+		int vSize, iSize, liSize;
 	public:
 		void clear() {
 			vertices.clear();
 			indices.clear();
+			line_indices.clear();
 
 			vertices.shrink_to_fit();
 			indices.shrink_to_fit();
+			line_indices.shrink_to_fit();
 
 			vSize = 0;
 			iSize = 0;
+			liSize = 0;
 		}
 
 		Vec3* getVertices() {
@@ -27,6 +31,10 @@ namespace Edge3D {
 
 		unsigned int* getIndices() {
 			return indices.data();
+		}
+
+		unsigned int* getLineIndices() {
+			return line_indices.data();
 		}
 
 		virtual void calculate() = 0;
@@ -38,6 +46,11 @@ namespace Edge3D {
 		unsigned int getIndicesSize() {
 			return iSize;
 		}
+
+		unsigned int getLineIndicesSize() {
+			return liSize;
+		}
+
 	};
 }
 

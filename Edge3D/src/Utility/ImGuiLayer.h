@@ -8,7 +8,7 @@
 
 class ImGuiLayer {
 public:
-    static void init(GLFWwindow* window);
+    static void init(GLFWwindow* window, bool isImGuiFullscreen);
     static void begin();
     static void end();
     static void terminate();

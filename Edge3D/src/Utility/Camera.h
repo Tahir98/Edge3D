@@ -113,6 +113,10 @@ namespace Edge3D {
 			else if (pitch < -80)
 				pitch = -80;
 		}
+
+		Vec3 getDirection() {
+			return direction;
+		}
 	};
 }
 

@@ -80,8 +80,8 @@ namespace Edge3D {
         va.bind();
         vb->bind();
 
-        va.addVertexAttribute(3, GL_FLOAT, false);
-        va.addVertexAttribute(3, GL_FLOAT, false);
+        va.addVertexAttribute(vb, 3, GL_FLOAT, false);
+        va.addVertexAttribute(vb, 3, GL_FLOAT, false);
 
         setSegment(segment);
     }
@@ -134,7 +134,7 @@ namespace Edge3D {
         }
     }
 
-    void Cone::draw(Camera& camera, Light light) {
+    void Cone::draw(Camera& camera, PointLight light) {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
 

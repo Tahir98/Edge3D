@@ -6,6 +6,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\BlackHole.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\ConvexPolygon.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\CubeDemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\DemoScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
     <ClInclude Include="Scenes\DemoScene2.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -13,6 +25,9 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\LightDemo.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\MeshTest.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\Physics2D.h">
@@ -24,18 +39,14 @@
     <ClInclude Include="Scenes\TerrainGenerator.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\MeshTest.h" />
-    <ClInclude Include="Scenes\ConvexPolygon.h" />
-    <ClInclude Include="Scenes\CubeDemo.h" />
-    <ClInclude Include="Scenes\BlackHole.h" />
+    <ClInclude Include="Scenes\Menu.h" />
+    <ClInclude Include="Scenes\MeshTest2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SandboxApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\MeshTest.shader" />
-    <None Include="Shaders\Line2D.shader" />
-    <None Include="Shaders\cube_demo.shader" />
-    <None Include="Shaders\instance.shader" />
+    <None Include="Shaders\plane.shader" />
+    <None Include="Shaders\cursor.shader" />
   </ItemGroup>
 </Project>

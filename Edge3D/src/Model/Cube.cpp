@@ -62,9 +62,9 @@ namespace Edge3D {
 		va.bind();
 		vb->bind();
 
-		va.addVertexAttribute(3, GL_FLOAT, false);
-		va.addVertexAttribute(3, GL_FLOAT, false);
-		va.addVertexAttribute(3, GL_FLOAT, false);
+		va.addVertexAttribute(vb, 3, GL_FLOAT, false);
+		va.addVertexAttribute(vb, 3, GL_FLOAT, false);
+		va.addVertexAttribute(vb, 3, GL_FLOAT, false);
 
 		if (texturePath)
 			texture = new Texture(texturePath);
@@ -126,7 +126,7 @@ namespace Edge3D {
 		}
 	}
 
-	void Cube::draw(Camera& camera, Light light) {
+	void Cube::draw(Camera& camera, PointLight light) {
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 

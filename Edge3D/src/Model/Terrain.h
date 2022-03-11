@@ -164,13 +164,13 @@ namespace Edge3D{
 			vb1->bind();
 			va1.bind();
 
-			va1.addVertexAttribute(3, GL_FLOAT, false);
+			va1.addVertexAttribute(vb1,3, GL_FLOAT, false);
 
 			vb2->bind();
 			va2.bind();
 
-			va2.addVertexAttribute(3, GL_FLOAT, false);
-			va2.addVertexAttribute(3, GL_FLOAT, false);
+			va2.addVertexAttribute(vb2, 3, GL_FLOAT, false);
+			va2.addVertexAttribute(vb2, 3, GL_FLOAT, false);
 		}
 
 		void draw(Camera& camera) {
@@ -215,7 +215,7 @@ namespace Edge3D{
 			}
 		}
 
-		void draw(Camera& camera, Light light) {
+		void draw(Camera& camera, PointLight light) {
 			shader->bind();
 
 			model = Math::multiply(Math::multiply(Math::translate(pos), true, Math::scale(scale), false), true, Math::rotate(rotation), false);

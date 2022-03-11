@@ -22,7 +22,7 @@
 #include "OpenGL/VertexBuffer.h"
 #include "OpenGL/VertexArray.h"
 #include "OpenGL/Texture.h"
-
+#include "OpenGL/FrameBuffer.h"
 
 // Math libray for opengl
 #include "Math/Math.h"
@@ -56,3 +56,17 @@
 #include "Model/Meshes/CapsuleMesh.h"
 #include "Model/Meshes/CylinderMesh.h"
 #include "Model/Meshes/TorusMesh.h"
+
+
+//Random classes
+#include "Random/Xorshift.h"
+#include "Random/Xorshift64.h"
+#include "Random/MersenneTwister.h"
+#include "Random/MersenneTwister64.h"
+#include "Random/AddWithCarry.h"
+#include "Random/LaggedFibonacciGenerator.h"
+#include "Random/LaggedFibonacciGenerator64.h"
+#include "Random/MultiplyWithCarry.h"
+
+//Bit converter, from various int types to float and double
+#include "Random/BitConverter.h"

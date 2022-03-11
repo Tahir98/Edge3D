@@ -6,7 +6,7 @@
 #include <assert.h>
 
 namespace Edge3D {
-	Window::Window(std::string name, const int width, const int height, const bool vsync, const bool fullscreen){
+	Window::Window(std::string name, const int width, const int height, const bool vsync, const bool fullscreen, bool isImGuiFullscreen){
 		prop.name = name;
 		prop.width = width;
 		prop.height = height;
@@ -14,10 +14,10 @@ namespace Edge3D {
 		prop.vsync = vsync;
 		prop.fullscreen = fullscreen;
 
-		init();
+		init(isImGuiFullscreen);
 	}
 
-	void Window::init(){
+	void Window::init(bool isImGuiFullscreen){
 		if (glfwInit() == GLFW_FALSE) {
 			ENG_LOG_ERROR("Failed initialize GLFW");
 			exit(-1);
@@ -131,7 +131,13 @@ namespace Edge3D {
 			});
 
 		InputHandler::init();
-		ImGuiLayer::init(window);
+		if (!isImGuiFullscreen) {
+			ImGuiLayer::init(window,false);
+		}
+		else {
+			ImGuiLayer::init(window, true);
+		}
+		
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -147,7 +153,7 @@ namespace Edge3D {
 
 	void Window::update(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(1, 0, 0, 1);
+		glClearColor(0, 0, 0, 1);
 
 		
 

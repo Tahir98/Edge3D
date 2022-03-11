@@ -27,7 +27,7 @@ namespace Edge3D {
 		float delta;
 		bool logMessages = true;
 	public:
-		Window(std::string name ,const int width,const int height,const bool vsync,const bool fullscreen);
+		Window(std::string name ,const int width,const int height,const bool vsync,const bool fullscreen, bool isImGuiFullscreen);
 		~Window();
 
 		void update();
@@ -52,7 +52,7 @@ namespace Edge3D {
 		GLFWwindow* getGLFWWindowPointer();
 		
 	private:
-		void init();
+		void init(bool isImGuiFullscreen);
 	};
 
 }

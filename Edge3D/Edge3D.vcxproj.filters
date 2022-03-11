@@ -16,6 +16,9 @@
     <Filter Include="src\Model">
       <UniqueIdentifier>{2D026CB3-996C-202A-E2AA-D1CF4E54FE7E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Model\Meshes">
+      <UniqueIdentifier>{C10F1B0A-AD08-3A5C-D63A-1FE1C2921968}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\OpenGL">
       <UniqueIdentifier>{C15FA925-AD17-EB72-161F-C4CE02F68563}</UniqueIdentifier>
     </Filter>
@@ -142,12 +145,18 @@
     <ClInclude Include="vendor\ImGui\imstb_truetype.h">
       <Filter>vendor\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Model\Meshes\Mesh.h" />
-    <ClInclude Include="src\Model\Meshes\SphereMesh.h" />
-    <ClInclude Include="src\Model\Meshes\ConeMesh.h" />
-    <ClInclude Include="src\Model\Meshes\CapsuleMesh.h" />
-    <ClInclude Include="src\Model\Meshes\CylinderMesh.h" />
-    <ClInclude Include="src\Model\Meshes\TorusMesh.h" />
+    <ClInclude Include="src\OpenGL\FrameBuffer.h" />
+    <ClInclude Include="src\Utility\ImGuiThemes.h" />
+    <ClInclude Include="src\Random\AddWithCarry.h" />
+    <ClInclude Include="src\Random\BitConverter.h" />
+    <ClInclude Include="src\Random\LaggedFibonacciGenerator.h" />
+    <ClInclude Include="src\Random\LaggedFibonacciGenerator64.h" />
+    <ClInclude Include="src\Random\MersenneTwister.h" />
+    <ClInclude Include="src\Random\MersenneTwister64.h" />
+    <ClInclude Include="src\Random\MultiplyWithCarry.h" />
+    <ClInclude Include="src\Random\Random.h" />
+    <ClInclude Include="src\Random\Xorshift.h" />
+    <ClInclude Include="src\Random\Xorshift64.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -225,5 +234,7 @@
     <ClCompile Include="vendor\stb_image.c">
       <Filter>vendor</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenGL\FrameBuffer.cpp" />
+    <ClCompile Include="src\Random\BitConverter.cpp" />
   </ItemGroup>
 </Project>
