@@ -3,6 +3,7 @@
 #include "Scenes/TerrainAndPhysics.h"
 #include "Scenes/PBRScene.h"
 #include "Scenes/PhysicsEngine.h"
+#include "Scenes/TerrainGeneration.h"
 
 class Editor : public Edge3D::Application {
 public:
@@ -15,13 +16,14 @@ public:
 	}
 
 	void run() override {
-		Edge3D::Window window("Editor", 1600, 900, false, false, true);
+		Edge3D::Window window("Multi Layer Perlin Noise", 1920, 1080, false ,true, true);
 
 		//Edge3D::SceneManager::push(new T_P(window,"Terrain And Physics"));
 		//Edge3D::SceneManager::push(new PBRScene(window, "PBR"));
-		Edge3D::SceneManager::push(new PhysicsEngine(window, "Physic Engine"));
+		//Edge3D::SceneManager::push(new PhysicsEngine(window, "Physic Engine"));
+		Edge3D::SceneManager::push(new TerrainGeneration(window, "Terrain Generation"));
 
-		glfwSwapInterval(1);
+		glfwSwapInterval(0);
 
 		while (window.isRunning()) {
 			window.update();

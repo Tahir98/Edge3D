@@ -140,9 +140,12 @@
     <ClInclude Include="src\Scenes\PBRScene.h" />
     <ClInclude Include="src\Scenes\PhysicsEngine.h" />
     <ClInclude Include="src\Scenes\TerrainAndPhysics.h" />
+    <ClInclude Include="src\Scenes\TerrainGeneration.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\PBR.shader" />
+    <None Include="Shaders\Terrain2.shader" />
+    <None Include="Shaders\twireframe.shader" />
     <None Include="Shaders\wireframe.shader" />
     <None Include="Shaders\terrain.shader" />
   </ItemGroup>

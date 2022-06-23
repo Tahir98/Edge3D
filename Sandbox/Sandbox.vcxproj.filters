@@ -21,9 +21,6 @@
     <ClInclude Include="Scenes\DemoScene2.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\FlappyBird.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\LightDemo.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -41,6 +38,8 @@
     </ClInclude>
     <ClInclude Include="Scenes\Menu.h" />
     <ClInclude Include="Scenes\MeshTest2.h" />
+    <ClInclude Include="Scenes\PhysicsDemoSAS.h" />
+    <ClInclude Include="Scenes\CollisionTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SandboxApp.cpp" />
@@ -48,5 +47,6 @@
   <ItemGroup>
     <None Include="Shaders\plane.shader" />
     <None Include="Shaders\cursor.shader" />
+    <None Include="Shaders\collisiontest.shader" />
   </ItemGroup>
 </Project>

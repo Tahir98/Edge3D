@@ -75,7 +75,6 @@ out vec4 color;
 uniform DirectionalLight light;
 uniform vec3 viewPos;
 
-
 void main() {
 	//Ambient color
 	vec3 ambient = fs_in.ambient * light.ambient;

@@ -8,9 +8,9 @@
 namespace Edge3D {
 	class Log {
 	public:
+		static void init();
 		static std::shared_ptr<spdlog::logger> coreLogger;
 		static std::shared_ptr<spdlog::logger> appLogger;
-		static void init();
 	};
 }
 

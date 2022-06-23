@@ -58,6 +58,11 @@ public:
 		this->y = y;
 	}
 
+	void setSeed(const uint64_t x) {
+		this->x = x;
+		this->y = 6364136223846793005 * (x ^ (x << 62));
+	}
+
 	//It returns random 64bit unsigned integer
 	uint64_t nextUInt64() {
 		uint64_t temp = x ^ (x << a);

@@ -59,18 +59,18 @@ namespace Math {
 
     Matrix4x4 translate(const float x, const float y, const float z) {
         return {
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            x, y, z, 1
+            1, 0, 0, x,
+            0, 1, 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1
         };
     }
     Matrix4x4 translate(const Vec3 a) {
         return {
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            a.x, a.y, a.z, 1
+            1, 0, 0, a.x,
+            0, 1, 0, a.y,
+            0, 0, 1, a.z,
+            0, 0, 0, 1
         };
     }
 

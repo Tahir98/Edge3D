@@ -4,7 +4,7 @@
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec3 vNormal;
 
-uniform vec3 scale;
+uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
@@ -12,10 +12,11 @@ out vec3 pos;
 out vec3 normal;
  
 void main() {
-	pos = vPos * scale;
-	normal = vNormal;
+	vec4 coord = vec4(vPos, 1.0f) * model;
+	pos = coord.xyz;
+	normal = vNormal * mat3(model);
 
-	gl_Position = vec4(pos, 1.0f) * view * projection;
+	gl_Position = coord * view * projection;
 }
 
 

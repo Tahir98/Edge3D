@@ -22,7 +22,7 @@ namespace Edge3D {
 		void init() override;
 
 		void draw(Camera& camera) override;
-		void draw(Camera& camera, Light light) override;
+		void draw(Camera& camera, PointLight light) override;
 		void imGuiDraw() override;
 
 		void setSegment(const unsigned int segment);

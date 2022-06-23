@@ -128,16 +128,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Scenes\BlackHole.h" />
+    <ClInclude Include="Scenes\CollisionTest.h" />
     <ClInclude Include="Scenes\ConvexPolygon.h" />
     <ClInclude Include="Scenes\CubeDemo.h" />
     <ClInclude Include="Scenes\DemoScene.h" />
     <ClInclude Include="Scenes\DemoScene2.h" />
-    <ClInclude Include="Scenes\FlappyBird.h" />
     <ClInclude Include="Scenes\LightDemo.h" />
     <ClInclude Include="Scenes\Menu.h" />
     <ClInclude Include="Scenes\MeshTest.h" />
     <ClInclude Include="Scenes\MeshTest2.h" />
     <ClInclude Include="Scenes\Physics2D.h" />
+    <ClInclude Include="Scenes\PhysicsDemoSAS.h" />
     <ClInclude Include="Scenes\ShapesScene.h" />
     <ClInclude Include="Scenes\TerrainGenerator.h" />
   </ItemGroup>
@@ -150,6 +151,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\collisiontest.shader" />
     <None Include="Shaders\cursor.shader" />
     <None Include="Shaders\plane.shader" />
   </ItemGroup>
