@@ -2,6 +2,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include "Math/Math.h"
 
 namespace Edge3D {
 	class Shader{
@@ -25,8 +26,11 @@ namespace Edge3D {
 		void setUniformiv(const char* name, const unsigned int count, const int* value);
 		void setUniform1f(const char* name, const float& value);
 		void setUniform2f(const char* name, const float& v1, const float& v2);
+		void setUniform2f(const char* name, const Vec2& vec2);
 		void setUniform3f(const char* name, const float& v1, const float& v2, const float& v3);
+		void setUniform3f(const char* name, const Vec3& vec3);
 		void setUniform4f(const char* name, const float& v1, const float& v2, const float& v3, const float& v4);
+		void setUniform4f(const char* name, const Vec4& vec4);
 		void setUniformMatrix2fv(const char* name, const unsigned int count, const bool transpose, const float* pos);
 		void setUniformMatrix3fv(const char* name, const unsigned int count, const bool transpose, const float* pos);
 		void setUniformMatrix4fv(const char* name, const unsigned int count, const bool transpose, const float* pos);

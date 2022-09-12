@@ -25,19 +25,19 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Win64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist Win64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -78,10 +78,11 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,13 +94,14 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,13 +114,14 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;$(SolutionDir)Editor\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Dependencies\GLAD\include;..\Dependencies\spdlog\include;..\Dependencies\STB;..\Edge3D;..\Edge3D\src;..\Dependencies\GLFW\include;..\Edge3D\vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,27 +130,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Edge3D\Edge3D.vcxproj">
-      <Project>{11BA1EB0-FD5B-4986-E616-5DDAD257D0D6}</Project>
-    </ProjectReference>
+    <ClInclude Include="src\Procedural\Terrain.h" />
+    <ClInclude Include="src\Scenes\Menu.h" />
+    <ClInclude Include="src\Scenes\PBRScene.h" />
+    <ClInclude Include="src\Scenes\PhysicsEngine.h" />
+    <ClInclude Include="src\Scenes\PhysicsSimulation2D.h" />
+    <ClInclude Include="src\Scenes\TerrainAndPhysics.h" />
+    <ClInclude Include="src\Scenes\TerrainGeneration.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Procedural\Terrain.h" />
-    <ClInclude Include="src\Scenes\Menu.h" />
-    <ClInclude Include="src\Scenes\PBRScene.h" />
-    <ClInclude Include="src\Scenes\PhysicsEngine.h" />
-    <ClInclude Include="src\Scenes\TerrainAndPhysics.h" />
-    <ClInclude Include="src\Scenes\TerrainGeneration.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\PBR.shader" />
-    <None Include="Shaders\Terrain2.shader" />
-    <None Include="Shaders\twireframe.shader" />
-    <None Include="Shaders\wireframe.shader" />
-    <None Include="Shaders\terrain.shader" />
+    <ProjectReference Include="..\Edge3D\Edge3D.vcxproj">
+      <Project>{11BA1EB0-FD5B-4986-E616-5DDAD257D0D6}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -182,6 +182,14 @@ namespace Edge3D {
 			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
 	}
 
+	void Shader::setUniform2f(const char* name, const Vec2& vec2) {
+		int location = glGetUniformLocation(id, name);
+		if (location != -1)
+			glUniform2f(location, vec2.x, vec2.y);
+		else
+			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
+	}
+
 	void Shader::setUniform3f(const char* name,const float& v1,const float& v2, const float& v3) {
 		int location = glGetUniformLocation(id, name);
 		if (location != -1)
@@ -190,10 +198,26 @@ namespace Edge3D {
 			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
 	}
 
+	void Shader::setUniform3f(const char* name, const Vec3& vec3) {
+		int location = glGetUniformLocation(id, name);
+		if (location != -1)
+			glUniform3f(location, vec3.x, vec3.y, vec3.z);
+		else
+			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
+	}
+
 	void Shader::setUniform4f(const char* name, const float& v1, const float& v2, const float& v3, const float& v4) {
 		int location = glGetUniformLocation(id, name);
 		if (location != -1)
 			glUniform4f(location, v1, v2, v3, v4);
+		else
+			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
+	}
+
+	void Shader::setUniform4f(const char* name, const Vec4& vec4) {
+		int location = glGetUniformLocation(id, name);
+		if (location != -1)
+			glUniform4f(location, vec4.x, vec4.y, vec4.z, vec4.w);
 		else
 			ENG_LOG_ERROR("{0}: UNIFORM LOCATION NOT FOUND", name);
 	}

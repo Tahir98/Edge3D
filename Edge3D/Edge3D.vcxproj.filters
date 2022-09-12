@@ -22,6 +22,9 @@
     <Filter Include="src\OpenGL">
       <UniqueIdentifier>{C15FA925-AD17-EB72-161F-C4CE02F68563}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Random">
+      <UniqueIdentifier>{3D349E2B-29EC-DF78-92F3-B8D47ECA7A69}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Scene">
       <UniqueIdentifier>{0A06D2B3-7670-862A-BFAE-37D02B58647F}</UniqueIdentifier>
     </Filter>
@@ -70,6 +73,9 @@
     <ClInclude Include="src\Math\Math.h">
       <Filter>src\Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\OpenGL\FrameBuffer.h">
+      <Filter>src\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\OpenGL\IndexBuffer.h">
       <Filter>src\OpenGL</Filter>
     </ClInclude>
@@ -88,6 +94,36 @@
     <ClInclude Include="src\OpenGL\VertexBuffer.h">
       <Filter>src\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Random\AddWithCarry.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\BitConverter.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\LaggedFibonacciGenerator.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\LaggedFibonacciGenerator64.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\MersenneTwister.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\MersenneTwister64.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\MultiplyWithCarry.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\Random.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\Xorshift.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random\Xorshift64.h">
+      <Filter>src\Random</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene\Scene.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
@@ -101,6 +137,9 @@
       <Filter>src\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\ImGuiLayer.h">
+      <Filter>src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\ImGuiThemes.h">
       <Filter>src\Utility</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility\OrthographicCamera.h">
@@ -145,18 +184,6 @@
     <ClInclude Include="vendor\ImGui\imstb_truetype.h">
       <Filter>vendor\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\OpenGL\FrameBuffer.h" />
-    <ClInclude Include="src\Utility\ImGuiThemes.h" />
-    <ClInclude Include="src\Random\AddWithCarry.h" />
-    <ClInclude Include="src\Random\BitConverter.h" />
-    <ClInclude Include="src\Random\LaggedFibonacciGenerator.h" />
-    <ClInclude Include="src\Random\LaggedFibonacciGenerator64.h" />
-    <ClInclude Include="src\Random\MersenneTwister.h" />
-    <ClInclude Include="src\Random\MersenneTwister64.h" />
-    <ClInclude Include="src\Random\MultiplyWithCarry.h" />
-    <ClInclude Include="src\Random\Random.h" />
-    <ClInclude Include="src\Random\Xorshift.h" />
-    <ClInclude Include="src\Random\Xorshift64.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -170,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="src\Math\Math.cpp">
       <Filter>src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL\FrameBuffer.cpp">
+      <Filter>src\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\OpenGL\IndexBuffer.cpp">
       <Filter>src\OpenGL</Filter>
@@ -188,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="src\OpenGL\VertexBuffer.cpp">
       <Filter>src\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Random\BitConverter.cpp">
+      <Filter>src\Random</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Scene.cpp">
       <Filter>src\Scene</Filter>
@@ -234,7 +267,5 @@
     <ClCompile Include="vendor\stb_image.c">
       <Filter>vendor</Filter>
     </ClCompile>
-    <ClCompile Include="src\OpenGL\FrameBuffer.cpp" />
-    <ClCompile Include="src\Random\BitConverter.cpp" />
   </ItemGroup>
 </Project>

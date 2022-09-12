@@ -39,6 +39,9 @@ private:
 	Edge3D::SpherecalSkybox skybox;
 	Edge3D::PerspectiveCamera camera;
 	Edge3D::InputHandler handler;
+
+	Edge3D::FrameBuffer* fb = nullptr;
+
 	Vec2 now, prev;
 	bool isClicked = false;
 	float sensivity = 0.045f;
@@ -49,7 +52,6 @@ private:
 	Edge3D::VertexBuffer* vb = nullptr;
 	Edge3D::IndexBuffer* ib = nullptr;
 	Edge3D::Shader* shader = nullptr;
-	Edge3D::FrameBuffer* fb = nullptr;
 
 	uint32_t uniform_buffer;
 
@@ -91,8 +93,6 @@ private:
 
 	bool isAltPressed = false;
 	bool stop = false;
-
-	std::array<Area, AREA_COUNT> areas;
 
 	std::thread* updatethread1 = nullptr;
 	float updateTime1 = 0;
@@ -289,22 +289,6 @@ public:
 		pShader->setUniformMatrix4fv("model", 1, false, pModel.m[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		//pModel = Math::translate(0, width / 2.0f, -width) * (Math::scale(width * 2.0f, 1, width) * Math::rotateX(PI / 2.0f));
-		//pShader->setUniformMatrix4fv("model", 1, true, pModel.m[0]);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		//
-		//pModel = Math::translate(0, width / 2.0f, width) * (Math::scale(width * 2.0f, 1, width) * Math::rotateX(-PI / 2.0f));
-		//pShader->setUniformMatrix4fv("model", 1, true, pModel.m[0]);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		//
-		//pModel = Math::translate(width, width / 2.0f, 0) * (Math::scale(width, 1, 2.0f * width) * Math::rotateZ(PI / 2.0f));
-		//pShader->setUniformMatrix4fv("model", 1, true, pModel.m[0]);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		//
-		//pModel = Math::translate(-width, width / 2.0f, 0) * (Math::scale(width, 1, 2.0f * width) * Math::rotateZ(-PI / 2.0f));
-		//pShader->setUniformMatrix4fv("model", 1, true, pModel.m[0]);
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-
 		glEnable(GL_CULL_FACE);
 
 		fb->unbind();
@@ -336,6 +320,19 @@ public:
 
 	void onDestroy() {
 		APP_LOG_INFO("Scene onDestroy function called, id: {0}", id);
+
+		if (updatethread1 != nullptr) {
+			stop = true;
+			updatethread1->join();
+			delete updatethread1;
+			updatethread1 = nullptr;
+
+			updatethread2->join();
+			delete updatethread2;
+			updatethread2 = nullptr;
+
+			stop = false;
+		}
 	}
 
 	void check() {
@@ -518,7 +515,7 @@ public:
 			waitingDuration = 0;
 
 			updatethread1 = new std::thread(updateBalls1,&balls,&width,&height,&EC_Ground,&EC_Wall,&gravity,&stop,&updateTime1);
-			updatethread2 = new std::thread(updateBalls2, &balls,&areas, &width, &height, &EC_Ball, &stop, &updateTime2);
+			updatethread2 = new std::thread(updateBalls2, &balls, &width, &height, &EC_Ball, &stop, &updateTime2);
 		}
 
 		if (handler.getKeyState(GLFW_KEY_C)) {
@@ -590,7 +587,7 @@ public:
 			glBalls[glBalls.size() - 1].materrial = material;
 
 			updatethread1 = new std::thread(updateBalls1, &balls, &width, &height, &EC_Ground, &EC_Wall, &gravity, &stop, &updateTime1);
-			updatethread2 = new std::thread(updateBalls2, &balls, &areas, &width, &height, &EC_Ball, &stop, &updateTime2);
+			updatethread2 = new std::thread(updateBalls2, &balls, &width, &height, &EC_Ball, &stop, &updateTime2);
 		}
 		else if (!handler.getKeyState(GLFW_KEY_T)) {
 			isTPressed = false;
@@ -634,7 +631,7 @@ public:
 			else {
 				stop = false;
 				updatethread1 = new std::thread(updateBalls1, &balls, &width, &height, &EC_Ground, &EC_Wall, &gravity, &stop, &updateTime1);
-				updatethread2 = new std::thread(updateBalls2, &balls, &areas, &width, &height, &EC_Ball, &stop, &updateTime2);
+				updatethread2 = new std::thread(updateBalls2, &balls, &width, &height, &EC_Ball, &stop, &updateTime2);
 			}
 			
 		}
@@ -644,9 +641,11 @@ public:
 	}
 
 
-	static void updateBalls2(std::vector<Ball>* balls, std::array<Area, AREA_COUNT>* areas,float* width, float* height,
+	static void updateBalls2(std::vector<Ball>* balls, float* width, float* height,
 		float* EC_Ball, bool* stop, float* updatetime2) {
 		double delta = 0;
+
+		std::vector<Area> areas;
 
 		while (!(*stop)) {
 
@@ -655,49 +654,74 @@ public:
 			if ((*balls).size() <= 1000)
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-			unsigned int size = (uint32_t)sqrtf(areas->size() / 1.0f);
+			//unsigned int size = (uint32_t)sqrtf(areas->size() / 1.0f);
+			//
+			//for (unsigned int j = 0; j < 1; j++) {
+			//	for (unsigned int i = 0; i < size * size; i++) {
+			//		Area& area = (*areas)[j * size * size + i];
+			//		area.rect.min = { -*width + (unsigned int)(i / size) * (2.0f * *width) / size,j * (*height / 1.0f), -*width + (i % //size) * (2.0f * *width) / size };
+			//		area.rect.max = { area.rect.min.x + (2.0f * *width) / size ,area.rect.min.y + *height / 1.0f,
+			//			area.rect.min.z + (2.0f * *width) / size };
+			//	}
+			//}
 
-			for (unsigned int j = 0; j < 1; j++) {
-				for (unsigned int i = 0; i < size * size; i++) {
-					Area& area = (*areas)[j * size * size + i];
-					area.rect.min = { -*width + (unsigned int)(i / size) * (2.0f * *width) / size,j * (*height / 1.0f), -*width + (i % size) * (2.0f * *width) / size };
-					area.rect.max = { area.rect.min.x + (2.0f * *width) / size ,area.rect.min.y + *height / 1.0f,
-						area.rect.min.z + (2.0f * *width) / size };
+			float s = (*width * 2.0f) / 4.0f;
+			int size = (int)s + 1;
+			if (s - (int)s == 0.0f)
+				size = (int)s;
+
+			//APP_LOG_WARN("Size: {0}", size);
+
+			for (Area& area : areas) {
+				area.items.clear();
+				area.items.shrink_to_fit();
+			}
+			areas.clear();
+			areas.shrink_to_fit();
+
+			for (uint32_t i = 0; i < size; i++) {
+				for (uint32_t j = 0; j < size; j++) {
+					Area area;
+					area.rect.min = { -*width + (float)i * 4.0f, 0, -*width + (float)j * 4.0f };
+					area.rect.max = { -*width + (float)(i + 1) * 4.0f, *height, -*width + (float)(j + 1) * 4.0f };
+					areas.push_back(area);
 				}
 			}
-
-
-
-			for (auto& i : *areas)
-				i.items.clear();
 
 			for (uint32_t i = 0; i < (*balls).size(); i++) {
 				Rect rect;
 				rect.min = { (*balls)[i].pos - Vec3{(*balls)[i].radius,(*balls)[i].radius,(*balls)[i].radius} };
 				rect.max = { (*balls)[i].pos + Vec3{(*balls)[i].radius,(*balls)[i].radius,(*balls)[i].radius} };
 
-				for (uint32_t j = 0; j < (*areas).size(); j++) {
-					if (fully_collide((*areas)[j].rect, rect)) {
-						(*areas)[j].items.push_back(i);
-						break;
-					}
+				int i1, j1;
+				i1 = (int)((*width + rect.min.x) / 4.0f);
+				j1 = (int)((*width + rect.min.z) / 4.0f);
 
-					if (collide(rect, (*areas)[j].rect)) {
-						(*areas)[j].items.push_back(i);
-					}
-				}
+				int i2, j2;
+				i2 = (int)((*width + rect.max.x) / 4.0f);
+				j2 = (int)((*width + rect.max.z) / 4.0f);
+				
+				if(i1 >= 0 && j1 >= 0 && i1 < size && j1 < size)
+					areas[i1 * size + j1].items.push_back(i);
+				
+				if(i1 != i2 && j1 == j2 && i2 >= 0 && j1 >= 0 && i2 < size && j1 < size)
+					areas[i2 * size + j1].items.push_back(i);
+
+				if (i1 == i2 && j1 != j2 && i1 >= 0 && i1 < size && j2 >= 0 && j2 < size)
+					areas[i1 * size + j2].items.push_back(i);
+
+				if (i1 != i2 && j1 != j2 && i2 >= 0 && j2 >= 0 && i2 < size && j2 < size)
+					areas[i2 * size + j2].items.push_back(i);
 			}
 
-			
+			for (uint32_t k = 0; k < areas.size(); k++) {
 
-			for (uint32_t k = 0; k < areas->size(); k++) {
+				for (uint32_t i = 0; i < areas[k].items.size(); i++) {
+					Ball& ball = (*balls)[areas[k].items[i]];
 
-				for (uint32_t i = 0; i < (*areas)[k].items.size(); i++) {
-					Ball& ball = (*balls)[(*areas)[k].items[i]];
+					for (uint32_t j = i + 1; j < areas[k].items.size(); j++) {
 
-					for (uint32_t j = i + 1; j < (*areas)[k].items.size(); j++) {
-
-						Ball& ball2 = (*balls)[(*areas)[k].items[j]];
+						Ball& ball2 = (*balls)[areas[k].items[j]];
 
 						float lenSq = (ball.pos - ball2.pos).lengthSquare();
 
@@ -714,7 +738,6 @@ public:
 							Ball temp = ball;
 
 							ball.velocity = (ball.velocity - (Math::dotProduct(ball.velocity - ball2.velocity, ball.pos - ball2.pos) / (ball.pos - ball2.pos).lengthSquare()) * (ball.pos - ball2.pos)) * *EC_Ball;
-
 							ball2.velocity = (ball2.velocity - (Math::dotProduct(ball2.velocity - temp.velocity, ball2.pos - temp.pos) / (ball2.pos - temp.pos).lengthSquare()) * (ball2.pos - temp.pos)) * *EC_Ball;
 						}
 					}
@@ -832,3 +855,93 @@ public:
 	}
 };
 
+
+
+/*
+double delta = 0;
+
+		while (!(*stop)) {
+
+			auto clock1 = std::chrono::high_resolution_clock::now();
+
+			if ((*balls).size() <= 1000)
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+			//unsigned int size = (uint32_t)sqrtf(areas->size() / 1.0f);
+			//
+			//for (unsigned int j = 0; j < 1; j++) {
+			//	for (unsigned int i = 0; i < size * size; i++) {
+			//		Area& area = (*areas)[j * size * size + i];
+			//		area.rect.min = { -*width + (unsigned int)(i / size) * (2.0f * *width) / size,j * (*height / 1.0f), -*width + (i % //size) * (2.0f * *width) / size };
+			//		area.rect.max = { area.rect.min.x + (2.0f * *width) / size ,area.rect.min.y + *height / 1.0f,
+			//			area.rect.min.z + (2.0f * *width) / size };
+			//	}
+			//}
+
+			float s = *width / 4.0f;
+			int size = (int)s + 1;
+			if (s - (int)s == 0.0f)
+				size = (int)s;
+
+
+			for (auto& i : *areas)
+				i.items.clear();
+
+			for (uint32_t i = 0; i < (*balls).size(); i++) {
+				Rect rect;
+				rect.min = { (*balls)[i].pos - Vec3{(*balls)[i].radius,(*balls)[i].radius,(*balls)[i].radius} };
+				rect.max = { (*balls)[i].pos + Vec3{(*balls)[i].radius,(*balls)[i].radius,(*balls)[i].radius} };
+
+				for (uint32_t j = 0; j < (*areas).size(); j++) {
+					if (fully_collide((*areas)[j].rect, rect)) {
+						(*areas)[j].items.push_back(i);
+						break;
+					}
+
+					if (collide(rect, (*areas)[j].rect)) {
+						(*areas)[j].items.push_back(i);
+					}
+				}
+			}
+
+
+
+			for (uint32_t k = 0; k < areas->size(); k++) {
+
+				for (uint32_t i = 0; i < (*areas)[k].items.size(); i++) {
+					Ball& ball = (*balls)[(*areas)[k].items[i]];
+
+					for (uint32_t j = i + 1; j < (*areas)[k].items.size(); j++) {
+
+						Ball& ball2 = (*balls)[(*areas)[k].items[j]];
+
+						float lenSq = (ball.pos - ball2.pos).lengthSquare();
+
+						if (lenSq < (ball.radius + ball2.radius) * (ball.radius + ball2.radius)) {
+
+							float length = (ball.pos - ball2.pos).length();
+							float diff = ball.radius + ball2.radius - length;
+
+							Vec3 direction = Math::normalize(ball2.pos - ball.pos);
+
+							ball.pos = ball.pos - direction * diff * 0.51f;
+							ball2.pos = ball2.pos + direction * diff * 0.51f;
+
+							Ball temp = ball;
+
+							ball.velocity = (ball.velocity - (Math::dotProduct(ball.velocity - ball2.velocity, ball.pos - ball2.pos) / (ball.pos - ball2.pos).lengthSquare()) * (ball.pos - ball2.pos)) * *EC_Ball;
+
+							ball2.velocity = (ball2.velocity - (Math::dotProduct(ball2.velocity - temp.velocity, ball2.pos - temp.pos) / (ball2.pos - temp.pos).lengthSquare()) * (ball2.pos - temp.pos)) * *EC_Ball;
+						}
+					}
+				}
+			}
+
+			auto clock2 = std::chrono::high_resolution_clock::now();
+
+			auto duration = std::chrono::duration_cast<std::chrono::microseconds> (clock2 - clock1).count();
+
+			delta = duration / 1000000.0;
+			*updatetime2 = (float)delta;
+		}
+*/

@@ -23,6 +23,8 @@ namespace Edge3D {
 			exit(-1);
 		}
 
+		ENG_LOG_INFO("GLFW is initialized successfuly");
+
 		//glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 		//glfwWindowHint(GLFW_VERSION_MINOR, 3);
 		//glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
@@ -198,7 +200,7 @@ namespace Edge3D {
 			glViewport(0,0,prop.width,prop.height);
 		}
 		else {
-			ENG_LOG_WARN("Width must be bigger 0");
+			ENG_LOG_WARN("Width must be bigger than 0");
 		}
 	}
 
@@ -214,7 +216,7 @@ namespace Edge3D {
 			glViewport(0, 0, prop.width, prop.height);
 		}
 		else {
-			ENG_LOG_WARN("Width must be bigger 0");
+			ENG_LOG_WARN("Height must be bigger than 0");
 		}
 	}
 

@@ -32,7 +32,7 @@ namespace Edge3D {
 
 		//Check if frame buffer is completed
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			APP_LOG_ERROR("Frame buffer error: frame bufffer is not completeds");
+			ENG_LOG_ERROR("Frame buffer error: frame bufffer is not completed");
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

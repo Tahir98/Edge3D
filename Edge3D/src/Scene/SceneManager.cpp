@@ -21,6 +21,7 @@ namespace Edge3D {
 			Scene::count = 0;
 
 		scenes.push_back(scene);
+		ENG_LOG_INFO("{0} scene created", scene->name);
 		scene->id = Scene::count++;
 		scene->onCreate();
 	}

@@ -76,6 +76,8 @@ namespace Edge3D {
 
 		void setColor(Color color);
 		void setColor(const float r, const float g, const float b, const float a);
+
+		void setWorldSize(const float width, const float height);
 	};
 }
 

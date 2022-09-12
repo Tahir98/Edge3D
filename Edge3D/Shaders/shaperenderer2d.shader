@@ -1,5 +1,5 @@
 #vertex shader
-#version 330 core
+#version 430 core
 
 layout(location = 0) in vec2 pos;
 layout(location = 1) in vec4 bufferColor;
@@ -11,13 +11,13 @@ uniform float height;
 
 
 void main() {
-	gl_Position = vec4(-2.0 * (width - pos.x) / (width) + 1.0, -2.0 * (height - pos.y) / (height) + 1.0, 0.0, 1.0);
+	gl_Position = vec4(-2.0f * (width - pos.x) / (width) + 1.0f, -2.0f * (height - pos.y) / (height) + 1.0f, 0.0f, 1.0f);
 	color = bufferColor;
 }
 
 
 #fragment shader
-#version 330 core
+#version 430 core
 
 in vec4 color;
 out vec4 oColor;

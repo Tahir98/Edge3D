@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Procedural">
+      <UniqueIdentifier>{560CA380-42C4-E4CD-ABCB-BD2997A27FBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{86EEB3D0-7290-DEA6-5B4B-F2FA478C65F7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Procedural\Terrain.h">
+      <Filter>Procedural</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\Menu.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\PBRScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\PhysicsEngine.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\PhysicsSimulation2D.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\TerrainAndPhysics.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\TerrainGeneration.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Editor.cpp" />
+  </ItemGroup>
+</Project>

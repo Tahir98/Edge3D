@@ -26,8 +26,11 @@ namespace Edge3D {
 			ENG_LOG_ERROR("Only one vertex buffer allowed, Vertex Array id: {0}",id);
 			return;
 		}
-		else if(this->vb == nullptr) {
+		else if(this->vb == nullptr && vb != nullptr) {
 			this->vb = vb;
+		}
+		else if(vb == nullptr) {
+			ENG_LOG_ERROR("Vertex buffer object is null, Vertex Array id: {0}", id);
 		}
 
 		bind();

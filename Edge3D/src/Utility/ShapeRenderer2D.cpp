@@ -1026,5 +1026,13 @@ namespace Edge3D {
 	float toRadian(float degree) {
 		return 2 * PI * (degree / 360.0f);
 	}
+
+	void ShapeRenderer2D::setWorldSize(const float width, const float height) {
+		if (width > 0)
+			this->width = width;
+
+		if (height > 0)
+			this->height = height;
+	}
 }
 

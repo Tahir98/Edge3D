@@ -32,9 +32,6 @@ namespace Edge3D {
 			float x, y, z;
 			int segment = 40;
 			float radius = 10;
-		
-
-			
 
 			for (unsigned int i = 0; i < 2 * segment + 1; i++) {
 				degY = (180.0f / (float)segment) * i;
@@ -129,7 +126,7 @@ namespace Edge3D {
 
 		void draw(Camera& camera) {
 			glEnable(GL_DEPTH_TEST);
-
+			//
 			shader->bind();
 			shader->setUniform1i("tex", 0);
 
@@ -140,10 +137,10 @@ namespace Edge3D {
 				if (i >= 12 && i < 15)
 					view.m[i / 4][i % 4] = 0;
 			}
-
+			
 			shader->setUniformMatrix4fv("view", 1, true, view.m[0]);
 			shader->setUniformMatrix4fv("projection", 1, true, camera.getProjectionMatrix());
-
+			//
 			va.bind();
 			ib->bind();
 

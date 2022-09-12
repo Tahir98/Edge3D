@@ -21,10 +21,6 @@ void main(){
 }
 
 
-
-
-
-
 #fragment shader
 #version 330 core
 

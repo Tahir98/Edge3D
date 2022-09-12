@@ -25,19 +25,19 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Win64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist Win64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -82,6 +82,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,6 +101,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,6 +121,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,17 +136,16 @@
     <ClInclude Include="Scenes\CubeDemo.h" />
     <ClInclude Include="Scenes\DemoScene.h" />
     <ClInclude Include="Scenes\DemoScene2.h" />
+    <ClInclude Include="Scenes\FlappyBird.h" />
     <ClInclude Include="Scenes\LightDemo.h" />
     <ClInclude Include="Scenes\Menu.h" />
     <ClInclude Include="Scenes\MeshTest.h" />
     <ClInclude Include="Scenes\MeshTest2.h" />
     <ClInclude Include="Scenes\Physics2D.h" />
     <ClInclude Include="Scenes\PhysicsDemoSAS.h" />
+    <ClInclude Include="Scenes\PressureSoftBodyModel.h" />
     <ClInclude Include="Scenes\ShapesScene.h" />
     <ClInclude Include="Scenes\TerrainGenerator.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SandboxApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Edge3D\Edge3D.vcxproj">
@@ -151,9 +153,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\collisiontest.shader" />
-    <None Include="Shaders\cursor.shader" />
-    <None Include="Shaders\plane.shader" />
+    <ClCompile Include="SandboxApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\softbody\object.shader" />
+    <None Include="Shaders\softbody\plane.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -188,7 +188,6 @@ public:
 
 	void onSuspend() {
 		APP_LOG_INFO("Scene onSuspend function called, id: {0}", id);
-
 	}
 
 	void onResume() {
