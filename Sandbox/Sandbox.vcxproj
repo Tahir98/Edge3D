@@ -158,6 +158,7 @@
   <ItemGroup>
     <None Include="Shaders\softbody\object.shader" />
     <None Include="Shaders\softbody\plane.shader" />
+    <None Include="Shaders\softbody\wireframe.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
