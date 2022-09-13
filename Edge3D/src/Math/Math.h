@@ -56,6 +56,10 @@ struct Vec2 {
     float lengthSquare() {
         return x * x + y * y;
     }
+
+    bool operator==(const Vec2& other) const {
+        return x == other.x && y == other.y;
+    }
 };
 
 
@@ -114,6 +118,10 @@ struct Vec3 {
 
     float lengthSquare() {
         return x * x + y * y + z * z;
+    }
+
+    bool operator==(const Vec3& other) const {
+        return x == other.x && y == other.y && z == other.z;
     }
 };
 
@@ -176,7 +184,9 @@ struct Vec4 {
         return x * x + y * y + z * z + w * w;
     }
 
-
+    bool operator==(const Vec4& other) const {
+        return x == other.x && y == other.y && z == other.z && w == other.w;
+    }
 };
 
 

@@ -3,8 +3,36 @@
 #include "Edge3D.h"
 #include <unordered_map>
 
+
+
 class SoftBody : public Edge3D::Scene {
 private:
+	struct Vertex {
+		Vec3 position;
+		Vec3 normal;
+	};
+
+	struct VertexInfo {
+		std::vector<uint32_t> mainIndices;
+		std::vector<uint32_t> triIndices;
+	};
+
+
+	struct KeyHasher {
+		std::size_t operator()(const Vec3& k) const {
+			using std::size_t;
+			using std::hash;
+			using std::string;
+
+			return ((hash<float>()(k.x)
+				^ (hash<float>()(k.y) << 1)) >> 1)
+				^ (hash<float>()(k.z) << 1);
+		}
+	};
+
+	std::unordered_map<Vec3, VertexInfo, KeyHasher> vertexTable;
+
+
 	Edge3D::Window& window;
 	Edge3D::SpherecalSkybox skybox;
 	Edge3D::PerspectiveCamera camera;
@@ -23,13 +51,13 @@ private:
 	Material planeMat;
 	Material mat;
 
-	std::vector<Vec3> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 	std::vector<uint32_t> wire_indices;
 
 	float length = 10;
 	float radius = 0.5f;
-	uint32_t segment = 12;
+	uint32_t segment = 16;
 	float distance = 1;
 
 	Edge3D::VertexArray va;
@@ -46,33 +74,6 @@ private:
 	Edge3D::VertexBuffer* plane_vb = nullptr;
 	Edge3D::IndexBuffer* plane_ib = nullptr;
 	Edge3D::Shader* plane_shader = nullptr;
-
-	struct VertexInfo {
-		std::vector<uint32_t> mainIndices;
-		std::vector<uint32_t> triIndices;
-	};
-
-	//template <>
-	//struct hash<Vec3>
-	//{
-	//	std::size_t operator()(const Vec3& vec3) const
-	//	{
-	//		using std::size_t;
-	//		using std::hash;
-	//		using std::string;
-	//
-	//		// Compute individual hash values for first,
-	//		// second and third and combine them using XOR
-	//		// and bit shifting:
-	//
-	//		return ((hash<Vec3>()(vec3.x)
-	//			^ (hash<Vec3>()(vec3.y) << 1)) >> 1)
-	//			^ (hash<Vec3>()(vec3.z) << 1);
-	//	}
-	//};
-
-
-	std::unordered_map<Vec3, VertexInfo> vertexTable;
 
 public:
 	SoftBody(Edge3D::Window& window, std::string name) : window(window), Scene(name), skybox("assets/rooitou_park.jpg"), camera(70,9.0f/16.0f,0.1f,500.0f) {
@@ -121,8 +122,7 @@ public:
 				Vec3 normal = { cosf(radian) ,sinf(radian),0};
 				Vec3 position = { normal.x * radius,normal.y * radius + radius + 0.1f, startPoint + distance * i };
 
-				vertices.push_back(position);
-				vertices.push_back(normal);
+				vertices.push_back({ position , normal });
 			}
 		}
 
@@ -159,7 +159,7 @@ public:
 		mat.specular = { 0.7f, 0.7f, 0.7f };
 		mat.shininess = 120;
 
-		vb = new Edge3D::VertexBuffer((float*)vertices.data(),sizeof(Vec3) * vertices.size(), GL_DYNAMIC_DRAW);
+		vb = new Edge3D::VertexBuffer((float*)vertices.data(),sizeof(Vertex) * vertices.size(), GL_DYNAMIC_DRAW);
 		ib = new Edge3D::IndexBuffer(indices.data(), sizeof(unsigned int) * indices.size(), GL_STATIC_DRAW);
 		shader = new Edge3D::Shader("Shaders/softbody/object.shader");
 		
@@ -195,7 +195,7 @@ public:
 		drawSettingPanel(delta);
 
 		calculateNormals();
-		vb->subData(0, sizeof(Vec3) * vertices.size(), (float*)vertices.data());
+		vb->subData(0, sizeof(Vertex) * vertices.size(), (float*)vertices.data());
 
 		camera.update(delta);
 
@@ -277,6 +277,8 @@ public:
 		shader->setUniform3f("material.specular", mat.specular);
 		shader->setUniform1f("material.shininess", mat.shininess);
 	
+		//glEnable(GL_CULL_FACE);
+
 		glDrawElements(GL_TRIANGLES, ib->getCount(), GL_UNSIGNED_INT, 0);
 
 		if (wireframe) {
@@ -382,29 +384,38 @@ public:
 		vertexTable.clear();
 
 		for (int i = 0; i < indices.size(); i++) {
-			if (vertexTable.find(vertices[indices[i] * 2]) == vertexTable.end()) {
-				vertexTable.insert(std::make_pair(vertices[indices[i] * 2], VertexInfo()));
+			if (vertexTable.find(vertices[indices[i]].position) == vertexTable.end()) {
+				vertexTable.insert(std::make_pair(vertices[indices[i]].position, VertexInfo()));
 			}
 
-			vertexTable[vertices[indices[i]] * 2].mainIndices.push_back(i);
-			vertexTable[vertices[indices[i]] * 2].triIndices.push_back(i / 3);
+			vertexTable[vertices[indices[i]].position].mainIndices.push_back(i);
+			vertexTable[vertices[indices[i]].position].triIndices.push_back(i / 3);
 		}
 	}
 
 	void calculateNormals() {
-		for (int i = 0; i < vertices.size()  / 2; i++) {
-			VertexInfo& info = vertexTable[vertices[i * 2]];
+		for (int i = 0; i < vertices.size(); i++) {
+			VertexInfo& info = vertexTable[vertices[i].position];
 
 			Vec3 normal = { 0,0,0 };
 
 			for (int j = 0; j < info.triIndices.size(); j++) {
-				Vec3 d1 = vertices[indices[info.triIndices[j] + 1]] - vertices[indices[info.triIndices[j] + 0]];
-				Vec3 d2 = vertices[indices[info.triIndices[j] + 1]] - vertices[indices[info.triIndices[j] + 2]];
+				Vec3 v0 = vertices[indices[info.triIndices[j] * 3 + 0]].position;
+				Vec3 v1 = vertices[indices[info.triIndices[j] * 3 + 1]].position;
+				Vec3 v2 = vertices[indices[info.triIndices[j] * 3 + 2]].position;
 
-				normal = normal + Math::crossProduct(Math::normalize(d1), Math::normalize(d2));
+				Vec3 d1 = v1 - v0;
+				Vec3 d2 = v1 - v2;
+
+				//APP_LOG_TRACE("d1 x:{1} y:{2} z:{3}", i, d1.x, d1.y, d1.z);
+				//APP_LOG_TRACE("d2 x:{1} y:{2} z:{3}", i, d2.x, d2.y, d2.z);
+
+				normal = normal - Math::crossProduct(Math::normalize(d1), Math::normalize(d2));
 			}
 
-			vertices[i * 2 + 1] = Math::normalize(normal);
+			//APP_LOG_TRACE("N{0} x:{1} y:{2} z:{3}", i, normal.x, normal.y, normal.z);
+
+			vertices[i].normal = Vec3(Math::normalize(normal));
 		}
 	}
 

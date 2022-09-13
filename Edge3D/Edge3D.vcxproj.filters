@@ -184,6 +184,7 @@
     <ClInclude Include="vendor\ImGui\imstb_truetype.h">
       <Filter>vendor\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility\LineRenderer3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -267,5 +268,8 @@
     <ClCompile Include="vendor\stb_image.c">
       <Filter>vendor</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\LineRenderer3D.shader" />
   </ItemGroup>
 </Project>
